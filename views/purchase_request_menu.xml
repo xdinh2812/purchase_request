@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_purchase_request_root" name="Purchase Request" sequence="1" />
+        <menuitem id="menu_purchase"
+                  name="Purchase Request"
+                  parent="menu_purchase_request_root"
+                  action="purchase_request_action"
+                  sequence="1"/>
+        <menuitem id="menu_purchase_request_line"
+                  name="Purchase Request Lines"
+                  parent="menu_purchase_request_root"
+                  action="purchase_request_line_action"
+                  sequence="1"/>
+    </data>
+</odoo>
