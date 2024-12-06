@@ -144,15 +144,23 @@ class PurchaseRequest(models.Model):
             raise e
 
         workbook.close()
-        output.seek(0)
+        excel_data = base64.b64encode(output.getvalue())
 
-        # Tạo tên file
-        filename = f'Purchase_Request_{self.name}.xlsx'
+        attachment_vals = {
+            'name': f'Purchase_Request_{self.name}.xlsx',
+            'datas': excel_data,
+            'store_fname': f'Purchase_Request_{self.name}.xlsx',
+            'type': 'binary',
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        }
 
-        # Trả về file excel
+        attachment = self.env['ir.attachment'].create(attachment_vals)
+
+        # Trả về URL download
+        download_url = f'/web/content/ir.attachment/{attachment.id}/datas/{attachment.name}?download=true'
+
         return {
             'type': 'ir.actions.act_url',
-            'url': f'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(output.getvalue()).decode()}',
-            'target': 'self',
-            'name': filename,
+            'url': download_url,
+            'target': 'new',
         }
